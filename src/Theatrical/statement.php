@@ -2,23 +2,15 @@
 
 namespace App\Theatrical;
 
-use stdClass;
 
 function statement ($invoice, $plays) : string
 {
     $totalAmount = 0;
     $volumeCredits = 0;
-    $play = new stdClass();
 
     $result = "Statement for {$invoice[0]->customer}\n";
     $format = "number_format";
     foreach ($invoice[0]->performances as $perf) {
-
-        try {
-            $thisAmount = amountFor($plays, $perf);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
 
         // add volume credits
         $volumeCredits += max($perf->audience - 30, 0);
@@ -26,9 +18,13 @@ function statement ($invoice, $plays) : string
         // add extra credit for every ten comedy attendees
         if ("comedy" === playFor($plays, $perf)["type"]) $volumeCredits += floor($perf->audience / 5);
 
-        // print line for this order
-        $result .= "  " . playFor($plays, $perf)["name"] . ": {$format($thisAmount/100,2)} ({$perf->audience} seats)\n";
-        $totalAmount += $thisAmount;
+        try {
+            // print line for this order
+            $result .= "  " . playFor($plays, $perf)["name"] . ": " . $format(amountFor($plays, $perf)/100,2) . " ({$perf->audience} seats)\n";
+            $totalAmount += amountFor($plays, $perf);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
     $result .= "Amount owed is {$format($totalAmount/100,2)}\n";
     $result .= "You earned {$volumeCredits} credits\n";
