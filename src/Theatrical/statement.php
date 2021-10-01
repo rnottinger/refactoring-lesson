@@ -13,7 +13,7 @@ function statement ($invoice, $plays) : string
     $result = "Statement for {$invoice[0]->customer}\n";
     $format = "number_format";
     foreach ($invoice[0]->performances as $perf) {
-        $play = $plays[$perf->playID];
+        $play = playFor($plays, $perf);
 
         try {
             $thisAmount = amountFor($perf, $play);
@@ -36,7 +36,9 @@ function statement ($invoice, $plays) : string
     return $result;
 }
 
-// check variable scope: perf, play, and thisAmount.
+function playFor($plays, $aPerformance) {
+    return $plays[$aPerformance->playID];
+}
 
 function amountFor($aPerformance, $play)
 {
