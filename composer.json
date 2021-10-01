@@ -9,12 +9,15 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "App\\" : "src/"
+            "App\\" : "src/",
+            "App\\Theatrical\\" : "src/Theatrical/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\" : "tests/"
+            "Tests\\" : "tests/",
+            "Tests\\Features\\" : "tests/Features",
+            "Tests\\Unit\\" : "tests/Unit"
         }
     },
     "require-dev": {

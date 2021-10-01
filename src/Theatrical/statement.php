@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Theatrical;
+
+use stdClass;
 
 function statement ($invoice, $plays) : string
 {
