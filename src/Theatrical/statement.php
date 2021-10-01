@@ -13,10 +13,9 @@ function statement ($invoice, $plays) : string
     $result = "Statement for {$invoice[0]->customer}\n";
     $format = "number_format";
     foreach ($invoice[0]->performances as $perf) {
-        $play = playFor($plays, $perf);
 
         try {
-            $thisAmount = amountFor($perf, $play);
+            $thisAmount = amountFor($perf, playFor($plays, $perf));
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -25,10 +24,10 @@ function statement ($invoice, $plays) : string
         $volumeCredits += max($perf->audience - 30, 0);
 
         // add extra credit for every ten comedy attendees
-        if ("comedy" === $play["type"]) $volumeCredits += floor($perf->audience / 5);
+        if ("comedy" === playFor($plays, $perf)["type"]) $volumeCredits += floor($perf->audience / 5);
 
         // print line for this order
-        $result .= "  {$play["name"]}: {$format($thisAmount/100,2)} ({$perf->audience} seats)\n";
+        $result .= "  " . playFor($plays, $perf)["name"] . ": {$format($thisAmount/100,2)} ({$perf->audience} seats)\n";
         $totalAmount += $thisAmount;
     }
     $result .= "Amount owed is {$format($totalAmount/100,2)}\n";
