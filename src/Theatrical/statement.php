@@ -15,7 +15,7 @@ function statement ($invoice, $plays) : string
     foreach ($invoice[0]->performances as $perf) {
 
         try {
-            $thisAmount = amountFor($perf, playFor($plays, $perf));
+            $thisAmount = amountFor($plays, $perf);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -39,10 +39,10 @@ function playFor($plays, $aPerformance) {
     return $plays[$aPerformance->playID];
 }
 
-function amountFor($aPerformance, $play)
+function amountFor($plays, $aPerformance): int
 {
     $result = 0;
-    switch ($play["type"]) {
+    switch (playFor($plays, $aPerformance)["type"]) {
         case "tragedy":
             $result = 40000;
             if ($aPerformance->audience > 30) {
@@ -57,7 +57,7 @@ function amountFor($aPerformance, $play)
             $result += 300 * $aPerformance->audience;
             break;
         default:
-            throw new \Exception("unknown play type: {$play["type"]}");
+            throw new \Exception("unknown play type: " . playFor($plays, $aPerformance)["type"]);
     }
     return $result;
 }
