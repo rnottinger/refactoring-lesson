@@ -11,12 +11,7 @@ function statement ($invoice, $plays) : string
     $result = "Statement for {$invoice[0]->customer}\n";
     $format = "number_format";
     foreach ($invoice[0]->performances as $perf) {
-
-        // add volume credits
-        $volumeCredits += max($perf->audience - 30, 0);
-
-        // add extra credit for every ten comedy attendees
-        if ("comedy" === playFor($plays, $perf)["type"]) $volumeCredits += floor($perf->audience / 5);
+        $volumeCredits += volumeCreditsFor($plays, $perf);
 
         try {
             // print line for this order
@@ -29,6 +24,18 @@ function statement ($invoice, $plays) : string
     $result .= "Amount owed is {$format($totalAmount/100,2)}\n";
     $result .= "You earned {$volumeCredits} credits\n";
     return $result;
+}
+
+function volumeCreditsFor($plays, $aPerformance)
+{
+    $volumeCredits = 0;
+    // add volume credits
+    $volumeCredits += max($aPerformance->audience - 30, 0);
+
+    // add extra credit for every ten comedy attendees
+    if ("comedy" === playFor($plays, $aPerformance)["type"]) $volumeCredits += floor($aPerformance->audience / 5);
+
+    return $volumeCredits;
 }
 
 function playFor($plays, $aPerformance) {
