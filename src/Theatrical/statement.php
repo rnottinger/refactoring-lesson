@@ -20,9 +20,10 @@ function statement ($invoice, $plays) : string
         }
     }
 
-    $totalAmount = appleSauce($plays, $invoice);
+//    $totalAmount = appleSauce($plays, $invoice);
 
-    $result .= "Amount owed is " . usd($totalAmount) . "\n";
+//    $result .= "Amount owed is " . usd($totalAmount) . "\n";
+    $result .= "Amount owed is " . usd(appleSauce($plays, $invoice)) . "\n";
     $result .= "You earned " . totalVolumeCredits($plays, $invoice) . " credits\n";
     return $result;
 }
