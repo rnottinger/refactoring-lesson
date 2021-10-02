@@ -14,28 +14,16 @@ namespace App\Theatrical;
  */
 function statement ($invoice, $plays) : string
 {
-//    $result = "Statement for {$invoice[0]->customer}\n";
-//
-//    foreach ($invoice[0]->performances as $perf) {
-//
-//        try {
-//            // print line for this order
-//            $result .= "  " . playFor($plays, $perf)["name"] . ": " . usd(amountFor($plays, $perf)) . " ({$perf->audience} seats)\n";
-//        } catch (\Exception $e) {
-//            return $e->getMessage();
-//        }
-//    }
-//
-//    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
-//    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
-//    return $result;
-    return renderPlainText($invoice, $plays);
+    $statementData = new \stdClass();
+    $statementData->customer = $invoice[0]->customer;
+    return renderPlainText($statementData, $invoice, $plays);
 }
 
-function renderPlainText($invoice, $plays): string
+function renderPlainText($data, $invoice, $plays): string
 {
 
-    $result = "Statement for {$invoice[0]->customer}\n";
+//    $result = "Statement for {$invoice[0]->customer}\n";
+    $result = "Statement for {$data->customer}\n";
 
     foreach ($invoice[0]->performances as $perf) {
 
