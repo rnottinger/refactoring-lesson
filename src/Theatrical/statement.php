@@ -22,15 +22,25 @@ function statement ($invoice, $plays) : string
         }
     }
 
-
-    $volumeCredits = 0;
-    foreach ($invoice[0]->performances as $perf) {
-        $volumeCredits += volumeCreditsFor($plays, $perf);
-    }
+//
+//    $volumeCredits = 0;
+//    foreach ($invoice[0]->performances as $perf) {
+//        $volumeCredits += volumeCreditsFor($plays, $perf);
+//    }
+    $volumeCredits = totalVolumeCredits($plays, $invoice);
 
     $result .= "Amount owed is " . usd($totalAmount) . "\n";
     $result .= "You earned {$volumeCredits} credits\n";
     return $result;
+}
+
+function totalVolumeCredits($plays, $invoice)
+{
+    $volumeCredits = 0;
+    foreach ($invoice[0]->performances as $aPerformance) {
+        $volumeCredits += volumeCreditsFor($plays, $aPerformance);
+    }
+    return $volumeCredits;
 }
 
 function usd($aNumber): string
