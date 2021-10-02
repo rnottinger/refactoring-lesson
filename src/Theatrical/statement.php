@@ -2,10 +2,38 @@
 
 namespace App\Theatrical;
 
-
+/**
+ * The top-level statement function
+ * is now just seven lines of code,
+ * and all it does is laying out
+ * the printing of the statement.
+ *
+ * @param $invoice
+ * @param $plays
+ * @return string
+ */
 function statement ($invoice, $plays) : string
 {
-//    $totalAmount = 0;
+//    $result = "Statement for {$invoice[0]->customer}\n";
+//
+//    foreach ($invoice[0]->performances as $perf) {
+//
+//        try {
+//            // print line for this order
+//            $result .= "  " . playFor($plays, $perf)["name"] . ": " . usd(amountFor($plays, $perf)) . " ({$perf->audience} seats)\n";
+//        } catch (\Exception $e) {
+//            return $e->getMessage();
+//        }
+//    }
+//
+//    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
+//    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
+//    return $result;
+    return renderPlainText($invoice, $plays);
+}
+
+function renderPlainText($invoice, $plays): string
+{
 
     $result = "Statement for {$invoice[0]->customer}\n";
 
@@ -19,13 +47,11 @@ function statement ($invoice, $plays) : string
         }
     }
 
-//    $result .= "Amount owed is " . usd(appleSauce($plays, $invoice)) . "\n";
-    $result .= "Amount owed is " . usd(totalAmount($plays, $invoice)) . "\n";
-    $result .= "You earned " . totalVolumeCredits($plays, $invoice) . " credits\n";
+    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
+    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
     return $result;
 }
-
-function totalAmount($plays, $invoice): int
+function totalAmount($invoice, $plays): int
 {
     $result = 0;
     foreach ($invoice[0]->performances as $aPerformance) {
@@ -33,8 +59,7 @@ function totalAmount($plays, $invoice): int
     }
     return $result;
 }
-
-function totalVolumeCredits($plays, $invoice): int
+function totalVolumeCredits($invoice, $plays): int
 {
     $result = 0;
     foreach ($invoice[0]->performances as $aPerformance) {
@@ -42,12 +67,10 @@ function totalVolumeCredits($plays, $invoice): int
     }
     return $result;
 }
-
 function usd($aNumber): string
 {
     return number_format($aNumber/100,2);
 }
-
 function volumeCreditsFor($plays, $aPerformance)
 {
     $result = 0;
@@ -59,11 +82,9 @@ function volumeCreditsFor($plays, $aPerformance)
 
     return $result;
 }
-
 function playFor($plays, $aPerformance) {
     return $plays[$aPerformance->playID];
 }
-
 function amountFor($plays, $aPerformance): int
 {
     $result = 0;
