@@ -14,37 +14,33 @@ function statement ($invoice, $plays) : string
         try {
             // print line for this order
             $result .= "  " . playFor($plays, $perf)["name"] . ": " . usd(amountFor($plays, $perf)) . " ({$perf->audience} seats)\n";
-//            $totalAmount += amountFor($plays, $perf);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-//    $totalAmount = appleSauce($plays, $invoice);
-
-//    $result .= "Amount owed is " . usd($totalAmount) . "\n";
-    $result .= "Amount owed is " . usd(appleSauce($plays, $invoice)) . "\n";
+//    $result .= "Amount owed is " . usd(appleSauce($plays, $invoice)) . "\n";
+    $result .= "Amount owed is " . usd(totalAmount($plays, $invoice)) . "\n";
     $result .= "You earned " . totalVolumeCredits($plays, $invoice) . " credits\n";
     return $result;
 }
 
-function appleSauce($plays, $invoice): int
+function totalAmount($plays, $invoice): int
 {
-    $totalAmount = 0;
+    $result = 0;
     foreach ($invoice[0]->performances as $aPerformance) {
-        $totalAmount += amountFor($plays, $aPerformance);
+        $result += amountFor($plays, $aPerformance);
     }
-    return $totalAmount;
-
+    return $result;
 }
 
-function totalVolumeCredits($plays, $invoice)
+function totalVolumeCredits($plays, $invoice): int
 {
-    $volumeCredits = 0;
+    $result = 0;
     foreach ($invoice[0]->performances as $aPerformance) {
-        $volumeCredits += volumeCreditsFor($plays, $aPerformance);
+        $result += volumeCreditsFor($plays, $aPerformance);
     }
-    return $volumeCredits;
+    return $result;
 }
 
 function usd($aNumber): string
