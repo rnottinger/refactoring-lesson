@@ -5,7 +5,8 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 use App\Theatrical;
-include '../../src/Theatrical/statement.php';
+
+include __DIR__ . '/../../src/Theatrical/statement.php';
 
 class StatementTest extends TestCase
 {
