@@ -6,7 +6,7 @@ namespace App\Theatrical;
 function statement ($invoice, $plays) : string
 {
     $totalAmount = 0;
-    $volumeCredits = 0;
+//    $volumeCredits = 0;
 
     $result = "Statement for {$invoice[0]->customer}\n";
 
@@ -23,6 +23,7 @@ function statement ($invoice, $plays) : string
     }
 
 
+    $volumeCredits = 0;
     foreach ($invoice[0]->performances as $perf) {
         $volumeCredits += volumeCreditsFor($plays, $perf);
     }
