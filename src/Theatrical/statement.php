@@ -6,12 +6,10 @@ namespace App\Theatrical;
 function statement ($invoice, $plays) : string
 {
     $totalAmount = 0;
-//    $volumeCredits = 0;
 
     $result = "Statement for {$invoice[0]->customer}\n";
 
     foreach ($invoice[0]->performances as $perf) {
-//        $volumeCredits += volumeCreditsFor($plays, $perf);
 
         try {
             // print line for this order
@@ -22,15 +20,12 @@ function statement ($invoice, $plays) : string
         }
     }
 
-//
-//    $volumeCredits = 0;
-//    foreach ($invoice[0]->performances as $perf) {
-//        $volumeCredits += volumeCreditsFor($plays, $perf);
-//    }
-    $volumeCredits = totalVolumeCredits($plays, $invoice);
+//    $volumeCredits = totalVolumeCredits($plays, $invoice);
 
     $result .= "Amount owed is " . usd($totalAmount) . "\n";
-    $result .= "You earned {$volumeCredits} credits\n";
+
+//    $result .= "You earned {$volumeCredits} credits\n";
+    $result .= "You earned " . totalVolumeCredits($plays, $invoice) . " credits\n";
     return $result;
 }
 
