@@ -9,20 +9,24 @@ function statement ($invoice, $plays) : string
     $volumeCredits = 0;
 
     $result = "Statement for {$invoice[0]->customer}\n";
-//    $format = "number_format";
+
     foreach ($invoice[0]->performances as $perf) {
-        $volumeCredits += volumeCreditsFor($plays, $perf);
+//        $volumeCredits += volumeCreditsFor($plays, $perf);
 
         try {
             // print line for this order
-//            $result .= "  " . playFor($plays, $perf)["name"] . ": " . $format(amountFor($plays, $perf)/100,2) . " ({$perf->audience} seats)\n";
             $result .= "  " . playFor($plays, $perf)["name"] . ": " . usd(amountFor($plays, $perf)) . " ({$perf->audience} seats)\n";
             $totalAmount += amountFor($plays, $perf);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-//    $result .= "Amount owed is {$format($totalAmount/100,2)}\n";
+
+
+    foreach ($invoice[0]->performances as $perf) {
+        $volumeCredits += volumeCreditsFor($plays, $perf);
+    }
+
     $result .= "Amount owed is " . usd($totalAmount) . "\n";
     $result .= "You earned {$volumeCredits} credits\n";
     return $result;
