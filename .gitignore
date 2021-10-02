@@ -2,3 +2,4 @@
 .phpunit.result.cache
 vendor/
 php_errors.log
+.phpunit.cache/
