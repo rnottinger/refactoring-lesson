@@ -28,14 +28,14 @@ function statement ($invoice, $plays) : string
 
 function volumeCreditsFor($plays, $aPerformance)
 {
-    $volumeCredits = 0;
+    $result = 0;
     // add volume credits
-    $volumeCredits += max($aPerformance->audience - 30, 0);
+    $result += max($aPerformance->audience - 30, 0);
 
     // add extra credit for every ten comedy attendees
-    if ("comedy" === playFor($plays, $aPerformance)["type"]) $volumeCredits += floor($aPerformance->audience / 5);
+    if ("comedy" === playFor($plays, $aPerformance)["type"]) $result += floor($aPerformance->audience / 5);
 
-    return $volumeCredits;
+    return $result;
 }
 
 function playFor($plays, $aPerformance) {
