@@ -5,7 +5,7 @@ namespace App\Theatrical;
 
 function statement ($invoice, $plays) : string
 {
-    $totalAmount = 0;
+//    $totalAmount = 0;
 
     $result = "Statement for {$invoice[0]->customer}\n";
 
@@ -14,19 +14,27 @@ function statement ($invoice, $plays) : string
         try {
             // print line for this order
             $result .= "  " . playFor($plays, $perf)["name"] . ": " . usd(amountFor($plays, $perf)) . " ({$perf->audience} seats)\n";
-            $totalAmount += amountFor($plays, $perf);
+//            $totalAmount += amountFor($plays, $perf);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-//    $volumeCredits = totalVolumeCredits($plays, $invoice);
+    $totalAmount = appleSauce($plays, $invoice);
 
     $result .= "Amount owed is " . usd($totalAmount) . "\n";
-
-//    $result .= "You earned {$volumeCredits} credits\n";
     $result .= "You earned " . totalVolumeCredits($plays, $invoice) . " credits\n";
     return $result;
+}
+
+function appleSauce($plays, $invoice): int
+{
+    $totalAmount = 0;
+    foreach ($invoice[0]->performances as $aPerformance) {
+        $totalAmount += amountFor($plays, $aPerformance);
+    }
+    return $totalAmount;
+
 }
 
 function totalVolumeCredits($plays, $invoice)
