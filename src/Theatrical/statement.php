@@ -16,19 +16,21 @@ function statement ($invoice, $plays) : string
 {
     $statementData = new \stdClass();
     $statementData->customer = $invoice[0]->customer;
-    $statementData->performances = $invoice[0]->performances;
+    $statementData->performances = array_map('App\Theatrical\enrichPerformance', $invoice[0]->performances);
 
-
-//    return renderPlainText($statementData, $invoice, $plays);
     return renderPlainText($statementData, $plays);
 }
 
-//function renderPlainText($data, $invoice, $plays): string
+function enrichPerformance($aPerformance)
+{
+    $result = clone $aPerformance;
+    return $result;
+}
+
 function renderPlainText($data, $plays): string
 {
     $result = "Statement for {$data->customer}\n";
 
-//    foreach ($invoice[0]->performances as $perf) {
     foreach ($data->performances as $perf) {
 
         try {
@@ -39,39 +41,28 @@ function renderPlainText($data, $plays): string
         }
     }
 
-//    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
     $result .= "Amount owed is " . usd(totalAmount($data->performances, $plays)) . "\n";
-
-//    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
     $result .= "You earned " . totalVolumeCredits($data->performances, $plays) . " credits\n";
     return $result;
 }
 
-
-//function totalAmount($invoice, $plays): int
 function totalAmount($performances, $plays): int
 {
     $result = 0;
-//    foreach ($invoice[0]->performances as $aPerformance) {
     foreach ($performances as $aPerformance) {
         $result += amountFor($plays, $aPerformance);
     }
     return $result;
 }
 
-
-
-//function totalVolumeCredits($invoice, $plays): int
 function totalVolumeCredits($performances, $plays): int
 {
     $result = 0;
-//    foreach ($invoice[0]->performances as $aPerformance) {
     foreach ($performances as $aPerformance) {
         $result += volumeCreditsFor($plays, $aPerformance);
     }
     return $result;
 }
-
 
 function usd($aNumber): string
 {
