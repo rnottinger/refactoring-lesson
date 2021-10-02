@@ -16,16 +16,20 @@ function statement ($invoice, $plays) : string
 {
     $statementData = new \stdClass();
     $statementData->customer = $invoice[0]->customer;
-    return renderPlainText($statementData, $invoice, $plays);
+    $statementData->performances = $invoice[0]->performances;
+
+
+//    return renderPlainText($statementData, $invoice, $plays);
+    return renderPlainText($statementData, $plays);
 }
 
-function renderPlainText($data, $invoice, $plays): string
+//function renderPlainText($data, $invoice, $plays): string
+function renderPlainText($data, $plays): string
 {
-
-//    $result = "Statement for {$invoice[0]->customer}\n";
     $result = "Statement for {$data->customer}\n";
 
-    foreach ($invoice[0]->performances as $perf) {
+//    foreach ($invoice[0]->performances as $perf) {
+    foreach ($data->performances as $perf) {
 
         try {
             // print line for this order
@@ -35,26 +39,40 @@ function renderPlainText($data, $invoice, $plays): string
         }
     }
 
-    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
-    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
+//    $result .= "Amount owed is " . usd(totalAmount($invoice, $plays)) . "\n";
+    $result .= "Amount owed is " . usd(totalAmount($data->performances, $plays)) . "\n";
+
+//    $result .= "You earned " . totalVolumeCredits($invoice, $plays) . " credits\n";
+    $result .= "You earned " . totalVolumeCredits($data->performances, $plays) . " credits\n";
     return $result;
 }
-function totalAmount($invoice, $plays): int
+
+
+//function totalAmount($invoice, $plays): int
+function totalAmount($performances, $plays): int
 {
     $result = 0;
-    foreach ($invoice[0]->performances as $aPerformance) {
+//    foreach ($invoice[0]->performances as $aPerformance) {
+    foreach ($performances as $aPerformance) {
         $result += amountFor($plays, $aPerformance);
     }
     return $result;
 }
-function totalVolumeCredits($invoice, $plays): int
+
+
+
+//function totalVolumeCredits($invoice, $plays): int
+function totalVolumeCredits($performances, $plays): int
 {
     $result = 0;
-    foreach ($invoice[0]->performances as $aPerformance) {
+//    foreach ($invoice[0]->performances as $aPerformance) {
+    foreach ($performances as $aPerformance) {
         $result += volumeCreditsFor($plays, $aPerformance);
     }
     return $result;
 }
+
+
 function usd($aNumber): string
 {
     return number_format($aNumber/100,2);
