@@ -15,24 +15,41 @@ namespace App\Theatrical;
  */
 function statement ($invoice, $plays) : string
 {
-    $statementData = new \stdClass();
-    $statementData->customer = $invoice[0]->customer;
 
     try {
-        $statementData->performances = array_map(static function ($aPerformance) use ($plays) {
-            $result = clone $aPerformance;
-            $result->play = playFor($plays, $result);
-            $result->amount = amountFor($result);
-            $result->volumeCredits = volumeCreditsFor($result);
-            return $result;
-        }, $invoice[0]->performances);
-        $statementData->totalAmount = totalAmount($statementData);
-        $statementData->totalVolumeCredits = totalVolumeCredits($statementData);
+//        $statementData = new \stdClass();
+//        $statementData->customer = $invoice[0]->customer;
+//        $statementData->performances = array_map(static function ($aPerformance) use ($plays) {
+//            $result = clone $aPerformance;
+//            $result->play = playFor($plays, $result);
+//            $result->amount = amountFor($result);
+//            $result->volumeCredits = volumeCreditsFor($result);
+//            return $result;
+//        }, $invoice[0]->performances);
+//        $statementData->totalAmount = totalAmount($statementData);
+//        $statementData->totalVolumeCredits = totalVolumeCredits($statementData);
 
-        return renderPlainText($statementData);
+//        return renderPlainText($statementData);
+        return renderPlainText(createStatementData($invoice, $plays));
     } catch (\Exception $e) {
         return $e->getMessage();
     }
+}
+
+function createStatementData($invoice, $plays): \stdClass
+{
+    $statementData = new \stdClass();
+    $statementData->customer = $invoice[0]->customer;
+    $statementData->performances = array_map(static function ($aPerformance) use ($plays) {
+        $result = clone $aPerformance;
+        $result->play = playFor($plays, $result);
+        $result->amount = amountFor($result);
+        $result->volumeCredits = volumeCreditsFor($result);
+        return $result;
+    }, $invoice[0]->performances);
+    $statementData->totalAmount = totalAmount($statementData);
+    $statementData->totalVolumeCredits = totalVolumeCredits($statementData);
+    return $statementData;
 }
 
 function renderPlainText($data): string
@@ -51,11 +68,6 @@ function renderPlainText($data): string
 
 function totalAmount($data): int
 {
-//    $result = 0;
-//    foreach ($data->performances as $aPerformance) {
-//        $result += $aPerformance->amount;
-//    }
-//    return $result;
     return array_reduce($data->performances, static function ($total, $p) {
         $total += $p->amount;
         return $total;
@@ -64,11 +76,6 @@ function totalAmount($data): int
 
 function totalVolumeCredits($data): int
 {
-//    $result = 0;
-//    foreach ($data->performances as $aPerformance) {
-//        $result += $aPerformance->volumeCredits;
-//    }
-//    return $result;
     return array_reduce($data->performances, static function ($total, $p) {
         $total += $p->volumeCredits;
         return $total;
