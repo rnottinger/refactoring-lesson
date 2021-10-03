@@ -26,6 +26,8 @@ function statement ($invoice, $plays) : string
             $result->volumeCredits = volumeCreditsFor($result);
             return $result;
         }, $invoice[0]->performances);
+        $statementData->totalAmount = totalAmount($statementData);
+        $statementData->totalVolumeCredits = totalVolumeCredits($statementData);
 
         return renderPlainText($statementData);
     } catch (\Exception $e) {
@@ -41,25 +43,29 @@ function renderPlainText($data): string
             $result .= "  " . $perf->play["name"] . ": " . usd($perf->amount) . " ({$perf->audience} seats)\n";
     }
 
-    $result .= "Amount owed is " . usd(totalAmount($data->performances)) . "\n";
-    $result .= "You earned " . totalVolumeCredits($data->performances) . " credits\n";
+//    $result .= "Amount owed is " . usd(totalAmount($data->performances)) . "\n";
+    $result .= "Amount owed is " . usd($data->totalAmount) . "\n";
+
+//    $result .= "You earned " . totalVolumeCredits($data->performances) . " credits\n";
+    $result .= "You earned " . $data->totalVolumeCredits . " credits\n";
     return $result;
 }
 
-function totalAmount($performances): int
+//function totalAmount($performances): int
+function totalAmount($data): int
 {
     $result = 0;
-    foreach ($performances as $aPerformance) {
+    foreach ($data->performances as $aPerformance) {
         $result += $aPerformance->amount;
     }
     return $result;
 }
 
-function totalVolumeCredits($performances): int
+//function totalVolumeCredits($performances): int
+function totalVolumeCredits($data): int
 {
     $result = 0;
-    foreach ($performances as $aPerformance) {
-//        $result += volumeCreditsFor($aPerformance);
+    foreach ($data->performances as $aPerformance) {
         $result += $aPerformance->volumeCredits;
     }
     return $result;
