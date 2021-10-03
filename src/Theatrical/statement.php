@@ -43,32 +43,36 @@ function renderPlainText($data): string
             $result .= "  " . $perf->play["name"] . ": " . usd($perf->amount) . " ({$perf->audience} seats)\n";
     }
 
-//    $result .= "Amount owed is " . usd(totalAmount($data->performances)) . "\n";
     $result .= "Amount owed is " . usd($data->totalAmount) . "\n";
 
-//    $result .= "You earned " . totalVolumeCredits($data->performances) . " credits\n";
     $result .= "You earned " . $data->totalVolumeCredits . " credits\n";
     return $result;
 }
 
-//function totalAmount($performances): int
 function totalAmount($data): int
 {
-    $result = 0;
-    foreach ($data->performances as $aPerformance) {
-        $result += $aPerformance->amount;
-    }
-    return $result;
+//    $result = 0;
+//    foreach ($data->performances as $aPerformance) {
+//        $result += $aPerformance->amount;
+//    }
+//    return $result;
+    return array_reduce($data->performances, static function ($total, $p) {
+        $total += $p->amount;
+        return $total;
+    }, 0);
 }
 
-//function totalVolumeCredits($performances): int
 function totalVolumeCredits($data): int
 {
-    $result = 0;
-    foreach ($data->performances as $aPerformance) {
-        $result += $aPerformance->volumeCredits;
-    }
-    return $result;
+//    $result = 0;
+//    foreach ($data->performances as $aPerformance) {
+//        $result += $aPerformance->volumeCredits;
+//    }
+//    return $result;
+    return array_reduce($data->performances, static function ($total, $p) {
+        $total += $p->volumeCredits;
+        return $total;
+    }, 0);
 }
 
 function usd($aNumber): string
