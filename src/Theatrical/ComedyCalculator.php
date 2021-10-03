@@ -2,9 +2,15 @@
 
 namespace App\Theatrical;
 
+/**
+ *
+ */
 class ComedyCalculator extends PerformanceCalculator
 {
 
+    /**
+     * @return float|int
+     */
     public function amount()
     {
         $result = 30000;

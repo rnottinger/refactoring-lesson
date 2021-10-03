@@ -2,43 +2,34 @@
 
 namespace App\Theatrical;
 
-
+/**
+ *
+ */
 class PerformanceCalculator
 {
     public $performance;
     public $play;
 
+    /**
+     * @param $aPerformance
+     * @param $aPlay
+     */
     public function __construct($aPerformance, $aPlay) {
         $this->performance = $aPerformance;
         $this->play = $aPlay;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function amount()
     {
         throw new \Exception('subclass responsibility');
-//        $result = 0;
-//        switch ($this->play["type"]) {
-//            case "tragedy":
-//                throw new \Exception('Bad Thing');
-//                $result = 40000;
-//                if ($this->performance->audience > 30) {
-//                    $result += 1000 * ($this->performance->audience - 30);
-//                }
-//                break;
-//            case "comedy":
-//                $result = 30000;
-//                if ($this->performance->audience > 20) {
-//                    $result += 10000 + 500 * ($this->performance->audience - 20);
-//                }
-//                $result += 300 * $this->performance->audience;
-//                break;
-//            default:
-//                throw new \Exception("unknown play type: " . $this->play["type"]);
-//        }
-//        return $result;
-
     } // end amount
 
+    /**
+     * @return false|float|int|mixed
+     */
     public function volumeCredits()
     {
         $result = 0;

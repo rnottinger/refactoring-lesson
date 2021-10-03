@@ -4,6 +4,12 @@ namespace App\Theatrical;
 
 include __DIR__ . '/PerformanceCalculator.php';
 
+/**
+ * @param $invoice
+ * @param $plays
+ * @return \stdClass
+ * @throws \Exception
+ */
 function createStatementData($invoice, $plays): \stdClass
 {
     $data = new \stdClass();
@@ -21,10 +27,14 @@ function createStatementData($invoice, $plays): \stdClass
     return $data;
 }
 
+/**
+ * @param $aPerformance
+ * @param $aPlay
+ * @return ComedyCalculator|TragedyCalculator
+ * @throws \Exception
+ */
 function createPerformanceCalculator($aPerformance, $aPlay)
 {
-//    return new PerformanceCalculator($aPerformance, $aPlay);
-
     switch($aPlay["type"]) {
         case "tragedy": return new TragedyCalculator($aPerformance, $aPlay);
         case "comedy" : return new ComedyCalculator($aPerformance, $aPlay);
@@ -33,6 +43,11 @@ function createPerformanceCalculator($aPerformance, $aPlay)
     }
 }
 
+/**
+ * @param $plays
+ * @param $aPerformance
+ * @return mixed
+ */
 function playFor($plays, $aPerformance) {
     return $plays[$aPerformance->playID];
 }
@@ -53,6 +68,10 @@ function amountFor($plays, $aPerformance): int
 
 }
 
+/**
+ * @param $data
+ * @return int
+ */
 function totalAmount($data): int
 {
     return array_reduce($data->performances, static function ($total, $p) {
@@ -61,6 +80,10 @@ function totalAmount($data): int
     }, 0);
 }
 
+/**
+ * @param $data
+ * @return int
+ */
 function totalVolumeCredits($data): int
 {
     return array_reduce($data->performances, static function ($total, $p) {

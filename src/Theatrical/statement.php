@@ -24,6 +24,10 @@ function statement ($invoice, $plays) : string
     }
 }
 
+/**
+ * @param $data
+ * @return string
+ */
 function renderPlainText($data): string
 {
     $result = "Statement for {$data->customer}\n";
@@ -52,6 +56,10 @@ function htmlStatement ($invoice, $plays): string
     }
 }
 
+/**
+ * @param $data
+ * @return string
+ */
 function renderHtml ($data): string
 {
     $result = "<h1>Statement for {$data->customer}</h1>\n";
@@ -67,7 +75,10 @@ function renderHtml ($data): string
     return $result;
 }
 
-
+/**
+ * @param $aNumber
+ * @return string
+ */
 function usd($aNumber): string
 {
     return number_format($aNumber/100,2);
