@@ -23,22 +23,6 @@ function statement ($invoice, $plays) : string
         return $e->getMessage();
     }
 }
-//
-//function createStatementData($invoice, $plays): \stdClass
-//{
-//    $statementData = new \stdClass();
-//    $statementData->customer = $invoice[0]->customer;
-//    $statementData->performances = array_map(static function ($aPerformance) use ($plays) {
-//        $result = clone $aPerformance;
-//        $result->play = playFor($plays, $result);
-//        $result->amount = amountFor($result);
-//        $result->volumeCredits = volumeCreditsFor($result);
-//        return $result;
-//    }, $invoice[0]->performances);
-//    $statementData->totalAmount = totalAmount($statementData);
-//    $statementData->totalVolumeCredits = totalVolumeCredits($statementData);
-//    return $statementData;
-//}
 
 function renderPlainText($data): string
 {
@@ -54,63 +38,38 @@ function renderPlainText($data): string
     return $result;
 }
 
+/**
+ * @param $invoice
+ * @param $plays
+ * @return string
+ */
+function htmlStatement ($invoice, $plays): string
+{
+    return renderHtml(createStatementData($invoice, $plays));
+}
+
+function renderHtml ($data): string
+{
+    $result = "<h1>Statement for {$data->customer}</h1>\n";
+    $result .= "<table>\n";
+    $result .= "<tr><th>play</th><th>seats</th><th>cost</th></tr>";
+    foreach ($data->performances as $perf) {
+//        $result .= "  " . $perf->play["name"] . ": " . usd($perf->amount) . " ({$perf->audience} seats)\n";
+        $result .= "  <tr><td>" . $perf->play["name"] . "</td><td>{$perf->audience}</td>";
+        $result .= "<td>" . usd($perf->amount) . "</td></tr>\n";
+    }
+    $result .= "</table>\n";
+    $result .= "<p>Amount owed is <em>" . usd($data->totalAmount) . "</em></p>\n";
+    $result .= "<p>You earned <em>" . $data->totalVolumeCredits . "</em> credits</p>\n";
+    return $result;
+
+//    $result .= "Amount owed is " . usd($data->totalAmount) . "\n";
+//    $result .= "You earned " . $data->totalVolumeCredits . " credits\n";
+//    return $result;
+}
+
+
 function usd($aNumber): string
 {
     return number_format($aNumber/100,2);
 }
-
-//function totalAmount($data): int
-//{
-//    return array_reduce($data->performances, static function ($total, $p) {
-//        $total += $p->amount;
-//        return $total;
-//    }, 0);
-//}
-//
-//function totalVolumeCredits($data): int
-//{
-//    return array_reduce($data->performances, static function ($total, $p) {
-//        $total += $p->volumeCredits;
-//        return $total;
-//    }, 0);
-//}
-
-
-//function volumeCreditsFor($aPerformance)
-//{
-//    $result = 0;
-//    // add volume credits
-//    $result += max($aPerformance->audience - 30, 0);
-//
-//    // add extra credit for every ten comedy attendees
-//    if ("comedy" === $aPerformance->play["type"]) $result += floor($aPerformance->audience / 5);
-//
-//    return $result;
-//}
-//
-//function playFor($plays, $aPerformance) {
-//    return $plays[$aPerformance->playID];
-//}
-//
-//function amountFor($aPerformance): int
-//{
-//    $result = 0;
-//    switch ($aPerformance->play["type"]) {
-//        case "tragedy":
-//            $result = 40000;
-//            if ($aPerformance->audience > 30) {
-//                $result += 1000 * ($aPerformance->audience - 30);
-//            }
-//            break;
-//        case "comedy":
-//            $result = 30000;
-//            if ($aPerformance->audience > 20) {
-//                $result += 10000 + 500 * ($aPerformance->audience - 20);
-//            }
-//            $result += 300 * $aPerformance->audience;
-//            break;
-//        default:
-//            throw new \Exception("unknown play type: " . $aPerformance->play["type"]);
-//    }
-//    return $result;
-//}
