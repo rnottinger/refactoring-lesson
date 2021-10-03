@@ -54,7 +54,6 @@ function renderHtml ($data): string
     $result .= "<table>\n";
     $result .= "<tr><th>play</th><th>seats</th><th>cost</th></tr>";
     foreach ($data->performances as $perf) {
-//        $result .= "  " . $perf->play["name"] . ": " . usd($perf->amount) . " ({$perf->audience} seats)\n";
         $result .= "  <tr><td>" . $perf->play["name"] . "</td><td>{$perf->audience}</td>";
         $result .= "<td>" . usd($perf->amount) . "</td></tr>\n";
     }
@@ -62,10 +61,6 @@ function renderHtml ($data): string
     $result .= "<p>Amount owed is <em>" . usd($data->totalAmount) . "</em></p>\n";
     $result .= "<p>You earned <em>" . $data->totalVolumeCredits . "</em> credits</p>\n";
     return $result;
-
-//    $result .= "Amount owed is " . usd($data->totalAmount) . "\n";
-//    $result .= "You earned " . $data->totalVolumeCredits . " credits\n";
-//    return $result;
 }
 
 
