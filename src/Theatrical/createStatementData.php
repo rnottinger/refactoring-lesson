@@ -9,7 +9,6 @@ function createStatementData($invoice, $plays): \stdClass
     $data = new \stdClass();
     $data->customer = $invoice[0]->customer;
     $data->performances = array_map(static function ($aPerformance) use ($plays) {
-//        $calculator = new PerformanceCalculator($aPerformance, playFor($plays, $aPerformance));
         $calculator = createPerformanceCalculator($aPerformance, playFor($plays, $aPerformance));
         $result = clone $aPerformance;
         $result->play = $calculator->play;
@@ -22,9 +21,16 @@ function createStatementData($invoice, $plays): \stdClass
     return $data;
 }
 
-function createPerformanceCalculator($aPerformance, $aPlay): PerformanceCalculator
+function createPerformanceCalculator($aPerformance, $aPlay)
 {
-    return new PerformanceCalculator($aPerformance, $aPlay);
+//    return new PerformanceCalculator($aPerformance, $aPlay);
+
+    switch($aPlay["type"]) {
+        case "tragedy": return new TragedyCalculator($aPerformance, $aPlay);
+        case "comedy" : return new ComedyCalculator($aPerformance, $aPlay);
+        default:
+            throw new \Exception("unknown play type: {$aPlay["type"]}");
+    }
 }
 
 function playFor($plays, $aPerformance) {
@@ -32,6 +38,9 @@ function playFor($plays, $aPerformance) {
 }
 
 /**
+ * @param $plays
+ * @param $aPerformance
+ * @return int
  * @throws \Exception
  */
 function amountFor($plays, $aPerformance): int
