@@ -21,4 +21,17 @@ class ComedyCalculator extends PerformanceCalculator
         return $result;
     }
 
+    public function volumeCredits()
+    {
+//        $result = 0;
+//        // add volume credits
+//        $result += max($this->performance->audience - 30, 0);
+//
+//        // add extra credit for every ten comedy attendees
+//        if ("comedy" === $this->play["type"]) $result += floor($this->performance->audience / 5);
+//
+//        return $result;
+        return parent::volumeCredits() + floor($this->performance->audience / 5);
+    } // end volumeCredits
+
 }
