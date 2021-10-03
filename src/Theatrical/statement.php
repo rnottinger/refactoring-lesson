@@ -45,7 +45,11 @@ function renderPlainText($data): string
  */
 function htmlStatement ($invoice, $plays): string
 {
-    return renderHtml(createStatementData($invoice, $plays));
+    try {
+        return renderHtml(createStatementData($invoice, $plays));
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 }
 
 function renderHtml ($data): string

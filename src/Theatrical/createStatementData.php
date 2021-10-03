@@ -34,6 +34,9 @@ function playFor($plays, $aPerformance) {
     return $plays[$aPerformance->playID];
 }
 
+/**
+ * @throws \Exception
+ */
 function amountFor($aPerformance): int
 {
     $result = 0;
